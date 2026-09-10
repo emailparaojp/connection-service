@@ -2,7 +2,7 @@
 
 Serviço centralizado para entrega de conexões Oracle criptografadas.
 
-Robôs autenticados recebem a string de conexão cifrada com **Fernet (AES-128-CBC + HMAC-SHA256)**, garantindo que nenhuma credencial Oracle trafegue em texto puro entre sistemas.
+Robôs/aplicações autenticados recebem a string de conexão cifrada com **Fernet (AES-128-CBC + HMAC-SHA256)**, garantindo que nenhuma credencial do banco de dados (Oracle pro exemplo) trafegue em texto puro entre sistemas.
 
 ---
 
@@ -28,15 +28,15 @@ Robôs autenticados recebem a string de conexão cifrada com **Fernet (AES-128-C
 
 ## Objetivo
 
-Centralizar e proteger as credenciais de conexão dos bancos Oracle utilizados pelos robôs da organização.
+Centralizar e proteger as credenciais de conexão dos bancos utilizados pelos robôs/aplicações da organização.
 
 **Problemas resolvidos:**
 
-- Robôs não armazenam localmente nenhuma credencial Oracle
+- Robôs/aplicações não armazenam localmente nenhuma credencial de banco de dados
 - Toda conexão é entregue criptografada — nunca em texto puro
 - Toda solicitação é auditada com IP, status e motivo
-- Controle de acesso por ambiente (DEV / HOM / PROD) por robô
-- Rate limiting para proteção contra abuso
+- Controle de acesso por ambiente (DEV / HOM / PROD) por robô/aplicação
+- Rate limiting para proteção contra abuso. O ideal é a aplicação fazer a busca e utilizar o resultado obtido evitando abrir muitas conexões
 
 ---
 
