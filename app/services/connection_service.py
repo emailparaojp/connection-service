@@ -116,7 +116,7 @@ class ServicoConexao:
 
         # --- Etapa 2: Obter configuração Oracle ---
         try:
-            config_oracle = self._configuracoes.obter_config_oracle(cd_ambiente)
+            config_oracle = self._configuracoes.obter_config_oracle(nm_sistema, cd_ambiente)
         except Exception as exc:
             logger.error(
                 "Falha ao obter configuração Oracle | cd_ambiente=%s | erro=%s",
