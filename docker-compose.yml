@@ -1,0 +1,67 @@
+# =============================================================
+# docker-compose.yml — connection-service (execução local)
+# =============================================================
+# Uso:
+#   docker compose up --build          # Sobe com rebuild
+#   docker compose up -d               # Sobe em background
+#   docker compose down                # Para e remove containers
+#   docker compose logs -f             # Acompanha logs
+# =============================================================
+
+services:
+  connection-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: connection-service
+
+    # Porta: host:container
+    ports:
+      - "8080:8080"
+
+    # Arquivo de variáveis de ambiente
+    # Copie .env.example para .env e preencha os valores antes de subir
+    env_file:
+      - .env
+
+    # Volumes persistentes
+    volumes:
+      # Persiste o banco SQLite de auditoria entre reinicializações
+      - sqlite_data:/app/audit.db
+      # Persiste os logs da aplicação no host
+      - ./logs:/app/logs
+
+    # Política de restart em produção local
+    restart: unless-stopped
+
+    # Health check (aguarda /health responder antes de marcar como healthy)
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+    # Limites de recursos (ajuste conforme necessidade)
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+        reservations:
+          cpus: "0.10"
+          memory: 64M
+
+    # Metadados
+    labels:
+      com.connection-service.description: "Serviço centralizado de conexões Oracle"
+      com.connection-service.version: "1.0.0"
+
+# =============================================================
+# Volumes nomeados
+# =============================================================
+volumes:
+  sqlite_data:
+    driver: local
+    labels:
+      com.connection-service.description: "Banco SQLite de auditoria"
